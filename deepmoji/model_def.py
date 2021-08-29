@@ -7,8 +7,8 @@ from keras.models import Model, Sequential
 from keras.layers.merge import concatenate
 from keras.layers import Input, Bidirectional, Embedding, Dense, Dropout, SpatialDropout1D, LSTM, Activation
 from keras.regularizers import L1L2
-from attlayer import AttentionWeightedAverage
-from global_variables import NB_TOKENS, NB_EMOJI_CLASSES
+from .attlayer import AttentionWeightedAverage
+from .global_variables import NB_TOKENS, NB_EMOJI_CLASSES
 import numpy as np
 from copy import deepcopy
 from os.path import exists
@@ -141,14 +141,17 @@ def deepmoji_architecture(nb_classes, nb_tokens, maxlen, feature_output=False, e
 
     # skip-connection from embedding to output eases gradient-flow and allows access to lower-level features
     # ordering of the way the merge is done is important for consistency with the pretrained model
-    lstm_0_output = Bidirectional(LSTM(512, return_sequences=True), name="bi_lstm_0")(x)
-    lstm_1_output = Bidirectional(LSTM(512, return_sequences=True), name="bi_lstm_1")(lstm_0_output)
+    lstm_0_output = Bidirectional(
+        LSTM(512, return_sequences=True), name="bi_lstm_0")(x)
+    lstm_1_output = Bidirectional(
+        LSTM(512, return_sequences=True), name="bi_lstm_1")(lstm_0_output)
     x = concatenate([lstm_1_output, lstm_0_output, x])
 
     # if return_attention is True in AttentionWeightedAverage, an additional tensor
     # representing the weight at each timestep is returned
     weights = None
-    x = AttentionWeightedAverage(name='attlayer', return_attention=return_attention)(x)
+    x = AttentionWeightedAverage(
+        name='attlayer', return_attention=return_attention)(x)
     if return_attention:
         x, weights = x
 
@@ -158,7 +161,8 @@ def deepmoji_architecture(nb_classes, nb_tokens, maxlen, feature_output=False, e
             x = Dropout(final_dropout_rate)(x)
 
         if nb_classes > 2:
-            outputs = [Dense(nb_classes, activation='softmax', name='softmax')(x)]
+            outputs = [
+                Dense(nb_classes, activation='softmax', name='softmax')(x)]
         else:
             outputs = [Dense(1, activation='sigmoid', name='softmax')(x)]
     else:

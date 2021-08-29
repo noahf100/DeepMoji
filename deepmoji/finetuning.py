@@ -18,13 +18,13 @@ from keras.optimizers import Adam
 from keras.utils.np_utils import to_categorical
 from keras.models import model_from_json
 
-from global_variables import (
+from .global_variables import (
     FINETUNING_METHODS,
     FINETUNING_METRICS,
     WEIGHTS_DIR)
 from tokenizer import tokenize
-from sentence_tokenizer import SentenceTokenizer
-from attlayer import AttentionWeightedAverage
+from .sentence_tokenizer import SentenceTokenizer
+from .attlayer import AttentionWeightedAverage
 
 
 def load_benchmark(path, vocab, extend_with=0):
@@ -538,7 +538,8 @@ def chain_thaw(model, nb_classes, train, val, test, batch_size,
 
     # Train using chain-thaw
     train_by_chain_thaw(model=model, train_gen=train_gen,
-                        val_data=(X_val, y_val), loss=loss, callbacks=callbacks,
+                        val_data=(
+                            X_val, y_val), loss=loss, callbacks=callbacks,
                         epoch_size=epoch_size, nb_epochs=nb_epochs,
                         checkpoint_weight_path=checkpoint_weight_path,
                         batch_size=batch_size, verbose=verbose)

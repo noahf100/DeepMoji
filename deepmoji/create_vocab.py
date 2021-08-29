@@ -4,10 +4,10 @@ import glob
 import json
 import numpy as np
 import uuid
-from filter_utils import is_special_token
-from word_generator import WordGenerator
+from .filter_utils import is_special_token
+from .word_generator import WordGenerator
 from collections import defaultdict, OrderedDict
-from global_variables import SPECIAL_TOKENS, VOCAB_PATH
+from .global_variables import SPECIAL_TOKENS, VOCAB_PATH
 from copy import deepcopy
 
 
@@ -46,7 +46,8 @@ class VocabBuilder():
             path: Where the vocabulary should be saved. If not specified, a
                   randomly generated filename is used instead.
         """
-        dtype = ([('word', '|S{}'.format(self.word_length_limit)), ('count', 'int')])
+        dtype = (
+            [('word', '|S{}'.format(self.word_length_limit)), ('count', 'int')])
         np_dict = np.array(self.word_counts.items(), dtype=dtype)
 
         # sort from highest to lowest frequency
@@ -117,7 +118,8 @@ class MasterVocab():
 
             sizes[path] = sum(dicts[path].values())
             print('Overall word count for {} -> {}'.format(path, sizes[path]))
-            print('Overall word number for {} -> {}'.format(path, len(dicts[path])))
+            print(
+                'Overall word number for {} -> {}'.format(path, len(dicts[path])))
 
         vocab_of_max_size = max(sizes, key=sizes.get)
         max_size = sizes[vocab_of_max_size]
@@ -125,7 +127,8 @@ class MasterVocab():
 
         # can force one vocabulary to always be present
         if force_appearance is not None:
-            force_appearance_path = [p for p in paths if force_appearance in p][0]
+            force_appearance_path = [
+                p for p in paths if force_appearance in p][0]
             force_appearance_vocab = deepcopy(dicts[force_appearance_path])
             print(force_appearance_path)
         else:
@@ -235,7 +238,8 @@ def extend_vocab_in_file(vocab, max_tokens=10000, vocab_path=VOCAB_PATH):
 
     # Save back to file
     with open(vocab_path, 'w') as f:
-        json.dump(current_vocab, f, sort_keys=True, indent=4, separators=(',', ': '))
+        json.dump(current_vocab, f, sort_keys=True,
+                  indent=4, separators=(',', ': '))
 
 
 def extend_vocab(current_vocab, new_vocab, max_tokens=10000):
