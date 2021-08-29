@@ -14,7 +14,7 @@ import csv
 import numpy as np
 from deepmoji.sentence_tokenizer import SentenceTokenizer
 from deepmoji.model_def import deepmoji_emojis
-from deepmoji.global_variables import PRETRAINED_PATH, VOCAB_PATH
+from deepmoji.global_variables import PRETRAINED_PATH, VOCAB_PATH, EMOJI_MAPPINGS
 
 OUTPUT_PATH = 'test_sentences.csv'
 
@@ -59,7 +59,8 @@ for i, t in enumerate(TEST_SENTENCES):
     t_prob = prob[i]
     ind_top = top_elements(t_prob, 5)
     t_score.append(sum(t_prob[ind_top]))
-    t_score.extend(ind_top)
+    # Convert to emoji
+    t_score.extend([EMOJI_MAPPINGS[i] for i in ind_top])
     t_score.extend([t_prob[ind] for ind in ind_top])
     scores.append(t_score)
     print(t_score)
