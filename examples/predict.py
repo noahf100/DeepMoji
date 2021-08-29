@@ -19,7 +19,7 @@ from deepmoji.global_variables import PRETRAINED_PATH, VOCAB_PATH, EMOJI_MAPPING
 
 
 parser = argparse.ArgumentParser(description='Inference on text.')
-parser.add_argument('text', metavar='t', type=str,
+parser.add_argument('--text', metavar='t', type=str,
                     help='Text to turn into emoji.')
 args = parser.parse_args()
 text = args.text
