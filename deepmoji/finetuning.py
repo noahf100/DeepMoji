@@ -22,7 +22,7 @@ from .global_variables import (
     FINETUNING_METHODS,
     FINETUNING_METRICS,
     WEIGHTS_DIR)
-from tokenizer import tokenize
+from .tokenizer import tokenize
 from .sentence_tokenizer import SentenceTokenizer
 from .attlayer import AttentionWeightedAverage
 
