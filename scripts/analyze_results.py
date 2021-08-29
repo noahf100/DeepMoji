@@ -1,4 +1,3 @@
-from __future__ import print_function
 
 import sys
 import glob
@@ -13,10 +12,12 @@ if len(sys.argv) == 3:
     METHOD = sys.argv[2]
 
 RESULTS_DIR = 'results/'
-RESULT_PATHS = glob.glob('{}/{}_{}_*_results.txt'.format(RESULTS_DIR, DATASET, METHOD))
+RESULT_PATHS = glob.glob(
+    '{}/{}_{}_*_results.txt'.format(RESULTS_DIR, DATASET, METHOD))
 
 if not RESULT_PATHS:
-    print('Could not find results for \'{}\' using \'{}\' in directory \'{}\'.'.format(DATASET, METHOD, RESULTS_DIR))
+    print('Could not find results for \'{}\' using \'{}\' in directory \'{}\'.'.format(
+        DATASET, METHOD, RESULTS_DIR))
 else:
     scores = []
     for path in RESULT_PATHS:

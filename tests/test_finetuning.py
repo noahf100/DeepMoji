@@ -86,10 +86,13 @@ def test_deepmoji_return_attention():
     assert (5, 2304) == model.layers[6].compute_output_shape(input_shape)
 
     # repeat above described tests when returning attention weights
-    model = deepmoji_emojis(maxlen=30, weight_path=PRETRAINED_PATH, return_attention=True)
+    model = deepmoji_emojis(
+        maxlen=30, weight_path=PRETRAINED_PATH, return_attention=True)
     assert 2 == len(model.outputs)
-    assert [['softmax', 0, 0], ['attlayer', 0, 1]] == model.get_config()['output_layers']
-    assert [(5, 2304), (5, 30)] == model.layers[6].compute_output_shape(input_shape)
+    assert [['softmax', 0, 0], ['attlayer', 0, 1]] == model.get_config()[
+        'output_layers']
+    assert [(5, 2304), (5, 30)] == model.layers[6].compute_output_shape(
+        input_shape)
 
 
 def test_relabel():
@@ -167,13 +170,13 @@ def test_score_emoji():
     """ Emoji predictions make sense.
     """
     test_sentences = [
-        u'I love mom\'s cooking',
-        u'I love how you never reply back..',
-        u'I love cruising with my homies',
-        u'I love messing with yo mind!!',
-        u'I love you and now you\'re just gone..',
-        u'This is shit',
-        u'This is the shit'
+        'I love mom\'s cooking',
+        'I love how you never reply back..',
+        'I love cruising with my homies',
+        'I love messing with yo mind!!',
+        'I love you and now you\'re just gone..',
+        'This is shit',
+        'This is the shit'
     ]
 
     expected = [
@@ -210,13 +213,13 @@ def test_encode_texts():
     """ Text encoding is stable.
     """
 
-    TEST_SENTENCES = [u'I love mom\'s cooking',
-                      u'I love how you never reply back..',
-                      u'I love cruising with my homies',
-                      u'I love messing with yo mind!!',
-                      u'I love you and now you\'re just gone..',
-                      u'This is shit',
-                      u'This is the shit']
+    TEST_SENTENCES = ['I love mom\'s cooking',
+                      'I love how you never reply back..',
+                      'I love cruising with my homies',
+                      'I love messing with yo mind!!',
+                      'I love you and now you\'re just gone..',
+                      'This is shit',
+                      'This is the shit']
 
     maxlen = 30
     batch_size = 32
@@ -230,4 +233,5 @@ def test_encode_texts():
 
     encoding = model.predict(tokenized)
     avg_across_sentences = np.around(np.mean(encoding, axis=0)[:5], 3)
-    assert np.allclose(avg_across_sentences, np.array([-0.023, 0.021, -0.037, -0.001, -0.005]))
+    assert np.allclose(avg_across_sentences, np.array(
+        [-0.023, 0.021, -0.037, -0.001, -0.005]))

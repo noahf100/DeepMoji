@@ -4,7 +4,7 @@ import json
 
 from deepmoji.sentence_tokenizer import SentenceTokenizer
 
-sentences = [u'A', u'B', u'C', u'D', u'E', u'F', u'G', u'H', u'I', u'J']
+sentences = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 
 dicts = [
     {'label': 0},
@@ -59,7 +59,8 @@ def test_dataset_split_explicit():
     st = SentenceTokenizer(vocab, 30)
     tokenized, _, _ = st.tokenize_sentences(sentences)
 
-    result, result_dicts, added = st.split_train_val_test(sentences, dicts, split_parameter, extend_with=0)
+    result, result_dicts, added = st.split_train_val_test(
+        sentences, dicts, split_parameter, extend_with=0)
     train = result[0]
     val = result[1]
     test = result[2]
@@ -94,7 +95,7 @@ def test_id_to_sentence():
           'aasdf': 1000,
           'basdf': 2000}
 
-    sentence = u'aasdf basdf basdf basdf'
+    sentence = 'aasdf basdf basdf basdf'
     st = SentenceTokenizer(vb, 30)
     token, _, _ = st.tokenize_sentences([sentence])
     assert st.to_sentence(token[0]) == sentence
@@ -108,8 +109,8 @@ def test_id_to_sentence_with_unknown():
           'aasdf': 1000,
           'basdf': 2000}
 
-    sentence = u'aasdf basdf ccc'
-    expected = u'aasdf basdf CUSTOM_UNKNOWN'
+    sentence = 'aasdf basdf ccc'
+    expected = 'aasdf basdf CUSTOM_UNKNOWN'
     st = SentenceTokenizer(vb, 30)
     token, _, _ = st.tokenize_sentences([sentence])
     assert st.to_sentence(token[0]) == expected

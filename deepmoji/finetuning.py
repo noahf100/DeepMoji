@@ -54,12 +54,12 @@ def load_benchmark(path, vocab, extend_with=0):
             maxlen: Maximum length of an input.
     """
     # Pre-processing dataset
-    with open(path) as dataset:
+    with open(path, 'rb') as dataset:
         data = pickle.load(dataset)
 
     # Decode data
     try:
-        texts = [unicode(x) for x in data['texts']]
+        texts = [str(x) for x in data['texts']]
     except UnicodeDecodeError:
         texts = [x.decode('utf-8') for x in data['texts']]
 
@@ -254,7 +254,7 @@ def sampling_generator(X_in, y_in, batch_size, epoch_size=25000,
         assert epoch_size % 2 == 0
         samples_pr_class = int(epoch_size / 2)
     else:
-        ind = range(len(X_in))
+        ind = list(range(len(X_in)))
 
     # Keep looping until training halts
     while True:

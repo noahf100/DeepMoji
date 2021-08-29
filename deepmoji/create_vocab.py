@@ -1,4 +1,3 @@
-from __future__ import print_function, division
 
 import glob
 import json
@@ -48,7 +47,7 @@ class VocabBuilder():
         """
         dtype = (
             [('word', '|S{}'.format(self.word_length_limit)), ('count', 'int')])
-        np_dict = np.array(self.word_counts.items(), dtype=dtype)
+        np_dict = np.array(list(self.word_counts.items()), dtype=dtype)
 
         # sort from highest to lowest frequency
         np_dict[::-1].sort(order='count')
@@ -66,7 +65,7 @@ class VocabBuilder():
         # Returns:
             List of strings, representing the next tokenized sentence.
         """
-        return self.word_gen.__iter__().next()
+        return next(self.word_gen.__iter__())
 
     def count_all_words(self):
         """ Generates word counts for all words in all sentences of the word
@@ -174,7 +173,7 @@ class MasterVocab():
             words[token] = -1
 
         # sort words by frequency
-        desc_order = OrderedDict(sorted(self.master_vocab.items(),
+        desc_order = OrderedDict(sorted(list(self.master_vocab.items()),
                                         key=lambda kv: kv[1], reverse=True))
         words.update(desc_order)
 
@@ -189,7 +188,7 @@ class MasterVocab():
 
         # output the index of each word for easy lookup
         final_words = OrderedDict()
-        for i, w in enumerate(words.keys()[:word_limit]):
+        for i, w in enumerate(list(words.keys())[:word_limit]):
             final_words.update({w: i})
         with open(path_vocab, 'w') as f:
             f.write(json.dumps(final_words, indent=4, separators=(',', ': ')))
@@ -261,16 +260,16 @@ def extend_vocab(current_vocab, new_vocab, max_tokens=10000):
     words = OrderedDict()
 
     # sort words by frequency
-    desc_order = OrderedDict(sorted(new_vocab.word_counts.items(),
+    desc_order = OrderedDict(sorted(list(new_vocab.word_counts.items()),
                                     key=lambda kv: kv[1], reverse=True))
     words.update(desc_order)
 
-    base_index = len(current_vocab.keys())
+    base_index = len(list(current_vocab.keys()))
     added = 0
     for word in words:
         if added >= max_tokens:
             break
-        if word not in current_vocab.keys():
+        if word not in list(current_vocab.keys()):
             current_vocab[word] = base_index + added
             added += 1
 

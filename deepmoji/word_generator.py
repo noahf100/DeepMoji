@@ -4,8 +4,6 @@
     filtering/processing of this input.
 '''
 
-from __future__ import division, print_function
-
 import re
 import unicodedata
 import numpy as np
@@ -64,7 +62,7 @@ class WordGenerator():
             that is not allowed.
         """
 
-        if not isinstance(sentence, unicode):
+        if not isinstance(sentence, str):
             raise ValueError("All sentences should be Unicode-encoded!")
         sentence = sentence.strip().lower()
 
@@ -96,9 +94,12 @@ class WordGenerator():
         """ Returns whether a word is ASCII """
 
         try:
-            word.decode('ascii')
+            if isinstance(word, str):
+                word.encode('ascii')
+            else:  # assume we have a bytes type (legacy Python2 code)
+                word.decode('ascii')
             return True
-        except (UnicodeDecodeError, UnicodeEncodeError):
+        except (AttributeError, UnicodeDecodeError, UnicodeEncodeError):
             return False
 
     def convert_unicode_punctuation(self, word):
@@ -289,9 +290,9 @@ class TweetWordGenerator(WordGenerator):
     def data_preprocess_filtering(self, line, iter_i):
         fields = line.strip().split("\t")
         valid, emojis = self.validated_tweet(fields)
-        text = fields[9].replace(u'\\n', u'') \
-                        .replace(u'\\r', u'') \
-                        .replace(u'&amp', u'&') if valid else ''
+        text = fields[9].replace('\\n', '') \
+                        .replace('\\r', '') \
+                        .replace('&amp', '&') if valid else ''
         return valid, text, {'emojis': emojis}
 
     def data_postprocess_filtering(self, words, iter_i):

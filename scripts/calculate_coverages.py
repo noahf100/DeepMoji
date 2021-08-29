@@ -1,4 +1,5 @@
-from __future__ import print_function
+
+from deepmoji.sentence_tokenizer import SentenceTokenizer, coverage
 import pickle
 import json
 import csv
@@ -8,12 +9,11 @@ import sys
 from os.path import dirname, abspath
 sys.path.insert(0, dirname(dirname(abspath(__file__))))
 
-from deepmoji.sentence_tokenizer import SentenceTokenizer, coverage
 
 OUTPUT_PATH = 'coverage.csv'
 DATASET_PATHS = [
     '../data/Olympic/raw.pickle',
-    '../data/PsychExp/raw.pickle',
+    # '../data/PsychExp/raw.pickle',
     '../data/SCv1/raw.pickle',
     '../data/SCv2-GEN/raw.pickle',
     '../data/SE0714/raw.pickle',
@@ -29,12 +29,12 @@ results = []
 for p in DATASET_PATHS:
     coverage_result = [p]
     print('Calculating coverage for {}'.format(p))
-    with open(p) as f:
-        s = pickle.load(f)
+    with open(p, 'rb') as f:
+        s = pickle.load(f, encoding='utf-8')
 
     # Decode data
     try:
-        s['texts'] = [unicode(x) for x in s['texts']]
+        s['texts'] = [str(x) for x in s['texts']]
     except UnicodeDecodeError:
         s['texts'] = [x.decode('utf-8') for x in s['texts']]
 
@@ -67,7 +67,7 @@ for p in DATASET_PATHS:
 
     results.append(coverage_result)
 
-with open(OUTPUT_PATH, 'wb') as csvfile:
+with open(OUTPUT_PATH, 'w') as csvfile:
     writer = csv.writer(csvfile, delimiter='\t', lineterminator='\n')
     writer.writerow(['Dataset', 'Own', 'Last', 'Full'])
     for i, row in enumerate(results):

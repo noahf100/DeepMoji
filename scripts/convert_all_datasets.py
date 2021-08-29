@@ -1,4 +1,8 @@
-from __future__ import print_function
+
+from deepmoji.tokenizer import tokenize
+from deepmoji.sentence_tokenizer import SentenceTokenizer, extend_vocab, coverage
+from deepmoji.create_vocab import VocabBuilder
+from deepmoji.word_generator import WordGenerator
 
 import json
 import math
@@ -8,14 +12,10 @@ import numpy as np
 from os.path import abspath, dirname
 sys.path.insert(0, dirname(dirname(abspath(__file__))))
 
-from deepmoji.word_generator import WordGenerator
-from deepmoji.create_vocab import VocabBuilder
-from deepmoji.sentence_tokenizer import SentenceTokenizer, extend_vocab, coverage
-from deepmoji.tokenizer import tokenize
 
 DATASETS = [
     'Olympic',
-    'PsychExp',
+    # 'PsychExp',
     'SCv1',
     'SCv2-GEN',
     'SE0714',
@@ -57,7 +57,7 @@ def convert_dataset(filepath, extend_with, vocab):
                                                   extend_with=extend_with)
     pick = format_pickle(dset, tokenized[0], tokenized[1], tokenized[2],
                          dicts[0], dicts[1], dicts[2])
-    with open(filepath, 'w') as f:
+    with open(filepath, 'wb') as f:
         pickle.dump(pick, f)
     cover = coverage(tokenized[2])
 
@@ -76,11 +76,11 @@ for dset in DATASETS:
     PATH_COMBINED = '{}/{}/{}'.format(DIR, dset, FILENAME_COMBINED)
 
     with open(PATH_RAW) as dataset:
-        data = pickle.load(dataset)
+        data = pickle.load(dataset, encoding='utf-8')
 
     # Decode data
     try:
-        texts = [unicode(x) for x in data['texts']]
+        texts = [str(x) for x in data['texts']]
     except UnicodeDecodeError:
         texts = [x.decode('utf-8') for x in data['texts']]
 

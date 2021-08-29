@@ -1,4 +1,3 @@
-from __future__ import print_function
 
 # allow us to import the codebase/keras directory
 import sys
@@ -14,7 +13,8 @@ DATASETS = ['SE0714', 'Olympic', 'PsychExp', 'SS-Twitter', 'SS-Youtube',
 def get_results(dset):
     METHOD = 'last'
     RESULTS_DIR = 'results/'
-    RESULT_PATHS = glob.glob('{}/{}_{}_*_results.txt'.format(RESULTS_DIR, dset, METHOD))
+    RESULT_PATHS = glob.glob(
+        '{}/{}_{}_*_results.txt'.format(RESULTS_DIR, dset, METHOD))
     assert len(RESULT_PATHS)
 
     scores = []

@@ -163,8 +163,8 @@ class SentenceTokenizer():
 
             # Helper function to verify provided indices are numbers in range
             def verify_indices(inds):
-                return list(filter(lambda i: isinstance(i, numbers.Number) and
-                                   i < len(sentences), inds))
+                return list([i for i in inds if isinstance(i, numbers.Number) and
+                             i < len(sentences)])
 
             ind_train = verify_indices(split_parameter[0])
             ind_val = verify_indices(split_parameter[1])
@@ -212,7 +212,7 @@ class SentenceTokenizer():
             together with spaces.
         """
         # Have to recalculate the mappings in case the vocab was extended.
-        ind_to_word = {ind: word for word, ind in self.vocabulary.iteritems()}
+        ind_to_word = {ind: word for word, ind in self.vocabulary.items()}
 
         sentence_as_list = [ind_to_word[x] for x in sentence_idx]
         cleaned_list = [x for x in sentence_as_list if x != 'CUSTOM_MASK']
